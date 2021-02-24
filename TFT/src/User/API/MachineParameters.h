@@ -1,37 +1,51 @@
 #ifndef _MACHINEPARAMETERS_H_
 #define _MACHINEPARAMETERS_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "menu.h"
 #include "coordinate.h"
 
 typedef enum
 {
-P_STEPS_PER_MM = 0,
-P_CURRENT,
-P_MAX_FEED_RATE,
-P_MAX_ACCELERATION,
-P_ACCELERATION,
-P_PROBE_OFFSET,
-P_BUMPSENSITIVITY,
-P_FWRETRACT,
-P_FWRECOVER,
-P_LIN_ADV,
-// Keep below items always at the end
-P_RESET_SETTINGS,
-P_RESTORE_SETTINGS,
-P_ITEMSCOUNT
-}PARAMETER_NAME;
+  P_STEPS_PER_MM = 0,
+  P_MAX_FEED_RATE,
+  P_MAX_ACCELERATION,
+  P_ACCELERATION,
+  P_JERK,
+  P_JUNCTION_DEVIATION,
+  P_HOME_OFFSET,
+  P_FWRETRACT,
+  P_FWRECOVER,
+  P_AUTO_RETRACT,
+  P_OFFSET_TOOL,
+  P_ABL_STATE,
+  P_PROBE_OFFSET,
+  P_LIN_ADV,
+  P_CURRENT,
+  P_BUMPSENSITIVITY,
+  P_HYBRID_THRESHOLD,
+  P_MBL_OFFSET,
+  // Keep below items always at the end
+  P_SAVE_SETTINGS,
+  P_RESTORE_SETTINGS,
+  P_RESET_SETTINGS,
+  P_ITEMSCOUNT
+} PARAMETER_NAME;
 
 #define PARAMETERS_COUNT P_RESET_SETTINGS
 
 typedef enum
 {
-X_STEPPER = 0,
-Y_STEPPER,
-Z_STEPPER,
-E_STEPPER,
-E2_STEPPER,
-STEPPER_COUNT
-}STEPPERS;
+  X_STEPPER = 0,
+  Y_STEPPER,
+  Z_STEPPER,
+  E_STEPPER,
+  E2_STEPPER,
+  STEPPER_COUNT
+} STEPPERS;
 
 typedef enum
 {
@@ -43,24 +57,34 @@ typedef enum
 
 typedef struct
 {
-float StepsPerMM[STEPPER_COUNT];
-float Current[STEPPER_COUNT];
-float MaxFeedRate[STEPPER_COUNT];
-float MaxAcceleration[STEPPER_COUNT];
-float Acceleration[3];
-float ProbeOffset[3];
-float BumpSensitivity[3];
-float FwRetract[4];
-float FwRecover[4];
-float LinAdvance[1];
-}PARAMETERS;
+  float StepsPerMM[STEPPER_COUNT];
+  float MaxFeedRate[STEPPER_COUNT];
+  float MaxAcceleration[STEPPER_COUNT];
+  float Acceleration[3];
+  float Jerk[4];
+  float JunctionDeviation[1];
+  float HomeOffset[3];
+  float FwRetract[4];
+  float FwRecover[4];
+  float AutoRetract[1];
+  float OffsetTool[3];
+  float ABLState[2];
+  float ProbeOffset[3];
+  float LinAdvance[2];
+  float Current[STEPPER_COUNT];
+  float BumpSensitivity[3];
+  float HybridThreshold[STEPPER_COUNT];
+  float MblOffset[1];
+} PARAMETERS;
 
 extern PARAMETERS infoParameters;
 
 extern char *const axisDisplayID[STEPPER_COUNT];
 extern const LABEL accel_disp_ID[];
+extern const LABEL junction_deviation_disp_ID[];
 extern const LABEL retract_disp_ID[];
 extern const LABEL recover_disp_ID[];
+extern const LABEL retract_auto_ID[];
 
 float getParameter(PARAMETER_NAME name, uint8_t index);
 void setParameter(PARAMETER_NAME name, uint8_t index, float val);
@@ -88,5 +112,9 @@ void restoreEepromSettings(void);
 
 //reset settings and eeprom to default values
 void resetEepromSettings(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
