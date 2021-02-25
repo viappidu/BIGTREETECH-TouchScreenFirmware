@@ -10,6 +10,8 @@ extern "C" {
 
 // config.ini Parameter Settings / Feature Settings
 #define LANG_KEY_STATUS_SCREEN                "label_status_screen:"
+#define LANG_KEY_CNC_MODE                     "label_cnc_mode:"
+#define LANG_KEY_LASER_MODE                   "label_laser_mode:"
 #define LANG_KEY_BAUDRATE                     "label_baudrate:"
 #define LANG_KEY_LANGUAGE                     "label_language:"
 #define LANG_KEY_ROTATE_UI                    "label_rotate_ui:"
@@ -191,6 +193,11 @@ extern "C" {
 #define LANG_KEY_STOW                         "label_stow:"
 #define LANG_KEY_REPEAT                       "label_repeat:"
 
+#define LANG_KEY_ZERO_X                       "label_zero_x:"
+#define LANG_KEY_ZERO_Y                       "label_zero_y:"
+#define LANG_KEY_ZERO_Z                       "label_zero_z:"
+#define LANG_KEY_XY                           "label_xy:"
+
 // Printer Tools
 #define LANG_KEY_NOZZLE                       "label_nozzle:"
 #define LANG_KEY_BED                          "label_bed:"
@@ -199,6 +206,9 @@ extern "C" {
 
 #define LANG_KEY_BLTOUCH                      "label_bltouch:"
 #define LANG_KEY_TOUCHMI                      "label_touchmi:"
+
+#define LANG_KEY_SPINDLE                      "label_spindle:"
+#define LANG_KEY_LASER                        "label_laser:"
 
 // Values
 #define LANG_KEY_1_DEGREE                     "label_1_degree:"
@@ -214,8 +224,10 @@ extern "C" {
 #define LANG_KEY_200_MM                       "label_200_mm:"
 
 #define LANG_KEY_1_PERCENT                    "label_1_percent:"
+#define LANG_KEY_2_PERCENT                    "label_2_percent:"
 #define LANG_KEY_5_PERCENT                    "label_5_percent:"
 #define LANG_KEY_10_PERCENT                   "label_10_percent:"
+#define LANG_KEY_100_PERCENT                  "label_100_percent:"
 #define LANG_KEY_PERCENT_VALUE                "label_percent_value:"
 
 #define LANG_KEY_5_SECONDS                    "label_5_seconds:"

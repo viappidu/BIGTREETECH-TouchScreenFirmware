@@ -21,7 +21,8 @@ extern "C" {
 #define SSICON_SECOND ROW
 #endif
 
-//select marlin or bigtree
+//select marlin, bigtree OR CNC
+//TODO: Check sizes
 #define SPACE_SELEX       ((LCD_WIDTH-ICON_WIDTH*2)/4)
 #define SPACE_SELEY       ((LCD_HEIGHT-ICON_HEIGHT)/2)
 #define text_startx       (LCD_WIDTH/2)

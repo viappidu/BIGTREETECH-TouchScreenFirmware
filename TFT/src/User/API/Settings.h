@@ -29,12 +29,12 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210124
+#define CONFIG_SUPPPORT 20210224
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210130 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210130 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210130 //(YYYYMMDD) change if any icon(s) is added or removed
+#define CONFIG_FLASH_SIGN     20210224 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210224 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210224 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -83,6 +83,10 @@ typedef struct
 {
   // General Settings
   uint8_t status_screen;
+  uint8_t cnc_mode;
+  uint8_t laser_mode;
+  float   touchplate_height;
+  uint8_t touchplate_on;
   uint8_t baudrate;
   uint8_t language;
 

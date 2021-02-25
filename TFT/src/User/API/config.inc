@@ -8,6 +8,8 @@
 //after changing/adding/removing a keyword, change the CONFIG_FLASH_SIGN in Settings.h
 
 X_CONFIG(STATUS_SCREEN)
+X_CONFIG(CNCMODE)
+X_CONFIG(LASERMODE)
 X_CONFIG(UART_BAUDRATE)
 X_CONFIG(LANGUAGE)
 X_CONFIG(TITLE_BG)
@@ -79,6 +81,9 @@ X_CONFIG(PREHEAT_TEMP_3)
 X_CONFIG(PREHEAT_TEMP_4)
 X_CONFIG(PREHEAT_TEMP_5)
 X_CONFIG(PREHEAT_TEMP_6)
+//-----------------------------Z min Touch Plate
+X_CONFIG(TOUCHPLATE_ON)
+X_CONFIG(TOUCHPLATE_HEIGHT)
 //-----------------------------Power Supply Settings (if connected to TFT Controller)
 X_CONFIG(PS_ON)
 X_CONFIG(PS_LOGIC)

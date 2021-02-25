@@ -352,4 +352,17 @@
     #define STRING_HEAT_HOTEND            "Heat hotend to %d℃?"
     #define STRING_Z_ALIGN                "Z Align"
 
+    #define STRING_ZERO_X                 "Zero X"
+    #define STRING_ZERO_Y                 "Zero Y"
+    #define STRING_ZERO_Z                 "Zero Z"
+    #define STRING_XY                     "XY"
+    #define STRING_SPINDLE                "Spindle"
+    #define STRING_CUT                    "Cut"
+    #define STRING_LASER                  "Laser"
+    #define STRING_LASER_2                "Laser 2%"
+    #define STRING_LASER_100              "Laser 100%"
+    #define STRING_LASER_OFF              "Laser Off"
+    #define STRING_CNC_MODE               "CNC Mode"
+    #define STRING_LASER_MODE             "Laser Mode"
+
 #endif

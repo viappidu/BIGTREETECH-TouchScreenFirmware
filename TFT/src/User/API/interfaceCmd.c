@@ -232,6 +232,14 @@ void sendQueueCmd(void)
           if (isPrinting())
             setPrintPause(true,true);
           break;
+        //TODO: Fix laser/spinle logic
+        case 3:
+          break;
+        case 4:
+          break;
+        case 5:
+           setLaserOff(true);
+          break;
         case 18: //M18/M84 disable steppers
         case 84:
           if(cmd_seen('S') && !cmd_seen('Y') && !cmd_seen('Z') && !cmd_seen('E'))

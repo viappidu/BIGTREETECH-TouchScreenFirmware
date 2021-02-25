@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210124
+#define CONFIG_VERSION 20210224
 
 //===========================================================================
 //============================= General Settings ============================
@@ -448,6 +448,15 @@
 //===========================================================================
 //=========================== Other Settings ================================
 //===========================================================================
+
+// Enable CNC mode mutually exclusive to UNIFIED_MENU
+#define CNC_MODE true
+
+// Enable Laser interface instead of the fan interface (for CNC mode only).
+#define LASER_MODE true
+
+// Change this if you'd like to have a Z offset after homing Z.
+#define TOUCHPLATE_OFFSET 0.0
 
 // Power Supply
 #define PS_ON_ACTIVE_HIGH true  // Set 'false' for ATX (1), 'true' for X-Box (2)

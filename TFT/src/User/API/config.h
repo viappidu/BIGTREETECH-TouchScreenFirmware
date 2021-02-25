@@ -18,6 +18,8 @@ extern "C" {
 
 //-----------------------------General Settings
 #define CONFIG_STATUS_SCREEN          "status_screen:"
+#define CONFIG_CNCMODE                "cnc_mode:"
+#define CONFIG_LASERMODE              "laser_mode:"
 #define CONFIG_UART_BAUDRATE          "baudrate:"
 #define CONFIG_LANGUAGE               "language:"
 
@@ -91,6 +93,9 @@ extern "C" {
 #define CONFIG_PREHEAT_TEMP_4         "preheat_temp4:"
 #define CONFIG_PREHEAT_TEMP_5         "preheat_temp5:"
 #define CONFIG_PREHEAT_TEMP_6         "preheat_temp6:"
+//-----------------------------Z min Touch Plate
+#define CONFIG_TOUCHPLATE_ON        "touchplate_on:"
+#define CONFIG_TOUCHPLATE_HEIGHT    "touchplate_height:"
 //-----------------------------Power Supply Settings (if connected to TFT controller)
 #define CONFIG_PS_ON                  "ps_on:"
 #define CONFIG_PS_LOGIC               "ps_on_active_high:"

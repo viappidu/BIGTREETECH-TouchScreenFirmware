@@ -75,6 +75,8 @@ typedef enum
 {
   SKEY_STATUS_SCREEN = 0,
   SKEY_TERMINAL_ACK,
+  SKEY_CNC,
+  SKEY_LASER,
   SKEY_INVERT_X_AXIS,
   SKEY_INVERT_Y_AXIS,
   SKEY_INVERT_Z_AXIS,
@@ -144,6 +146,8 @@ int fe_cur_page = 0;
 LISTITEM settingPage[SKEY_COUNT] = {
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_STATUS_SCREEN,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TERMINAL_ACK,            LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_CNC_MODE,                LABEL_BACKGROUND},
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_LASER_MODE,              LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_INVERT_X_AXIS,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_INVERT_Y_AXIS,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_INVERT_Z_AXIS,           LABEL_BACKGROUND},
@@ -229,6 +233,18 @@ void updateFeatureSettings(uint8_t key_val)
       infoSettings.terminalACK = (infoSettings.terminalACK + 1) % ITEM_TOGGLE_NUM;
       settingPage[item_index].icon = iconToggle[infoSettings.terminalACK];
       break;
+
+    case SKEY_CNC:
+      infoSettings.cnc_mode = (infoSettings.cnc_mode + 1) % ITEM_TOGGLE_NUM;
+      infoSettings.laser_mode = (infoSettings.laser_mode + 1) % ITEM_TOGGLE_NUM;
+      settingPage[item_index].icon = iconToggle[infoSettings.cnc_mode];
+     break;
+
+    case SKEY_LASER:
+      infoSettings.laser_mode = (infoSettings.laser_mode + 1) % ITEM_TOGGLE_NUM;
+      infoSettings.cnc_mode = (infoSettings.cnc_mode + 1) % ITEM_TOGGLE_NUM;
+      settingPage[item_index].icon = iconToggle[infoSettings.laser_mode];
+     break;
 
     case SKEY_INVERT_X_AXIS:
       infoSettings.invert_axis[X_AXIS] = (infoSettings.invert_axis[X_AXIS] + 1) % ITEM_TOGGLE_NUM;
@@ -462,6 +478,14 @@ void loadFeatureSettings()
 
         case SKEY_TERMINAL_ACK:
           settingPage[item_index].icon = iconToggle[infoSettings.terminalACK];
+          break;
+
+        case SKEY_CNC:
+          settingPage[item_index].icon = iconToggle[infoSettings.cnc_mode];
+          break;
+
+        case SKEY_LASER:
+          settingPage[item_index].icon = iconToggle[infoSettings.laser_mode];
           break;
 
         case SKEY_INVERT_X_AXIS:
