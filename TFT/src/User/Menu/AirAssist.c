@@ -1,21 +1,19 @@
 #include "AirAssist.h"
 #include "includes.h"
 
-const ITEM itemAirAssist[2] = {
-  // icon                        label
-  {ICON_AIR_ASSIST,                LABEL_OFF},
-  {ICON_AIR_ASSIST,                LABEL_ON},
-};
-
-static inline void updateCaseFanIcon(MENUITEMS * curmenu, bool state)
-{
-  curmenu->items[KEY_ICON_4] = itemAirAssist[state ? 1 : 0];
-}
-
-void airAssistReDraw()
+void airAssistSpeedReDraw()
 {
   char tempstr[20];
-  sprintf(tempstr, "  %d%%  ", airAssistSetSpeedPercent());
+
+  if (infoSettings.air_assist_type == 1)
+    sprintf(tempstr, "  %s  ", airAssistGetState() ? LABEL_ON : LABEL_OFF);
+  else
+  {
+    if (infoSettings.fan_percentage == 1)
+      sprintf(tempstr, "  %d/%d  ", airAssistGetCurPercent(), airAssistGetSetPercent());
+    else
+      sprintf(tempstr, "  %d/%d  ", (int)airAssistGetCurSpeed(), (int)airAssistGetSetSpeed());
+  }
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
@@ -28,50 +26,119 @@ void menuAirAssist(void)
     // title
     LABEL_AIR_ASSIST,
     // icon                         label
-    {{ICON_DEC,                     LABEL_DEC},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_INC,                     LABEL_INC},
-     {ICON_RGB_WHITE,               LABEL_ON},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACKGROUND,              LABEL_BACKGROUND},
-     {ICON_BACK,                    LABEL_BACK},}
+    {{ICON_DEC,                    LABEL_DEC},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_BACKGROUND,              LABEL_BACKGROUND},
+    {ICON_INC,                     LABEL_INC},
+    {ICON_FAN_HALF_SPEED ,         LABEL_HALF},
+    {ICON_FAN_FULL_SPEED,          LABEL_FULL},
+    {ICON_STOP,                    LABEL_STOP},
+    {ICON_BACK,                    LABEL_BACK},}
   };
+  
+  if (infoSettings.air_assist_type == 1)
+  {
+    airAssistItems.items[0].icon = ICON_BACKGROUND;
+    airAssistItems.items[0].label.index = LABEL_BACKGROUND;
+    airAssistItems.items[3].icon = ICON_BACKGROUND;
+    airAssistItems.items[3].label.index = LABEL_BACKGROUND;
+    airAssistItems.items[4].icon = ICON_AIR_ASSIST;
+    airAssistItems.items[4].label.index = LABEL_ON;
+    airAssistItems.items[5].icon = ICON_STOP;
+    airAssistItems.items[5].label.index = LABEL_STOP;
+    airAssistItems.items[6].icon = ICON_BACKGROUND;
+    airAssistItems.items[6].label.index = LABEL_BACKGROUND;
 
-  KEY_VALUES key_num = KEY_IDLE;
+  }
 
-  // Initiate query. Value will be compared in while loop
-  airAssistValueQuery();
+  if (infoSettings.air_assist_type != 1)
+    airAssistSetSpeed(airAssistGetCurSpeed());
 
-  bool currentAirAssistState = airAssistGetState();
-  bool previousAirAssistState = currentAirAssistState;
-  uint8_t currentAirAssistSpeed = airAssistGetSpeed();
-  uint8_t previousAirAssistSpeed = currentAirAssistSpeed;
-
-  updateAirAssistIcon(&airAssistItems, currentAirAssistState);
   menuDrawPage(&airAssistItems);
   airAssistSpeedReDraw();
 
+  #if LCD_ENCODER_SUPPORT
+    encoderPosition = 0;
+  #endif
+
   while (infoMenu.menu[infoMenu.cur] == menuAirAssist)
   {
-    key_num = menuKeyGetValue();
-
+    KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        airAssistChangeSpeedPrecent(-10);
-        airAssistSpeedReDraw();
+        if (infoSettings.air_assist_type != 1)
+        {
+          if (airAssistGetSetSpeed() > 0)
+          {
+            if (infoSettings.fan_percentage == 1)
+              airAssistSetPercent(airAssistGetSetPercent() - 1);
+            else
+              airAssistSetSpeed(airAssistGetSetSpeed() - 1);
+          }
+        }
         break;
 
+      case KEY_INFOBOX:
+      {
+        char titlestr[30];
+        if (infoSettings.air_assist_type != 1)
+        {
+          if (infoSettings.fan_percentage == 1)
+          {
+            strcpy(titlestr, "Min:0 | Max:100");
+            uint8_t val = numPadInt((u8 *) titlestr, airAssistGetSetPercent(), 0, false);
+            val = NOBEYOND(0, val, 100);
+
+            if (val != airAssistGetSetPercent())
+              airAssistSetPercent(val);
+          }
+          else
+          {
+            sprintf(titlestr, "Min:0 | Max:%d", 255);
+            uint8_t val = numPadInt((u8 *) titlestr, airAssistGetCurSpeed(), 0, false);
+            val = NOBEYOND(0, val,  255);
+
+            if (val != airAssistGetCurSpeed())
+              airAssistSetSpeed(val);
+          }
+
+          menuDrawPage(&airAssistItems);
+          airAssistSpeedReDraw();
+        }
+        break;
+      }
+
       case KEY_ICON_3:
-        airAssistChangeSpeedPrecent(10);
-        airAssistSpeedReDraw();
+        if (infoSettings.air_assist_type != 1)
+        {
+          if (airAssistGetSetSpeed() < 255)
+          {
+            if (infoSettings.fan_percentage == 1)
+              airAssistSetPercent(airAssistGetSetPercent() + 1);
+            else
+              airAssistSetSpeed( airAssistGetSetSpeed() + 1);
+          }
+        }
         break;
 
       case KEY_ICON_4:
-        airAssistToggleState();
-        menuDrawPage(&airAssistItems);
-        airAssistSpeedReDraw();
+        if (infoSettings.air_assist_type != 1)
+          airAssistSetSpeed(255 / 2);  // 50%
+        else
+          airAssistSetState(true);
+        break;
+
+      case KEY_ICON_5:
+        if (infoSettings.air_assist_type != 1)
+          airAssistSetSpeed(255);
+        else
+          airAssistSetState(false);
+        break;
+
+      case KEY_ICON_6:
+        if (infoSettings.air_assist_type != 1)
+          airAssistSetSpeed(0);
         break;
 
       case KEY_ICON_7:
@@ -79,32 +146,31 @@ void menuAirAssist(void)
         break;
 
       default:
-        #if LCD_ENCODER_SUPPORT
-          if (encoderPosition)
-          {
-            airAssistChangeSpeedPrecent(encoderPosition);
-            airAssistSpeedReDraw();
-            encoderPosition = 0;
-          }
-        #endif
+        if (infoSettings.air_assist_type != 1)
+        {
+          #if LCD_ENCODER_SUPPORT
+            if (encoderPosition)
+            {
+              if (airAssistGetSetSpeed() < 255 && encoderPosition > 0)
+              {
+                if (infoSettings.fan_percentage == 1)
+                  airAssistSetPercent(airAssistGetSetPercent() + 1);
+                else
+                  airAssistSetSpeed(airAssistGetSetSpeed() + 1);
+              }
+
+              if (airAssistGetSetSpeed() > 0 && encoderPosition < 0)
+              {
+                if (infoSettings.fan_percentage == 1)
+                  airAssistSetPercent(airAssistGetSetPercent() - 1);
+                else
+                  airAssistSetSpeed(airAssistGetSetSpeed() - 1);
+              }
+              encoderPosition = 0;
+            }
+          #endif
+        }
         break;
-    }
-
-    currentAirAssistState = airAssistGetState();
-    if (previousAirAssistState != currentAirAssistState)
-    {
-      // Dynamically change the pump on/off icon based on the current state
-      previousAirAssistState = currentAirAssistState;
-      updateAirAssistIcon(&airAssistItems, currentAirAssistState);
-      menuDrawItem(&airAssistItems.items[KEY_ICON_4], KEY_ICON_4);
-      airAssistSpeedReDraw();
-    }
-
-    currentAirAssistSpeed = airAssistGetSpeed();
-    if (previousAirAssistSpeed != currentAirAssistSpeed)
-    {
-      previousAirAssistSpeed = currentAirAssistSpeed;
-      airAssistSpeedReDraw();
     }
 
     loopProcess();

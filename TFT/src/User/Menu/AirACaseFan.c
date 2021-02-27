@@ -26,13 +26,11 @@ void menuAirACaseFan(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        //TODO: Create menu
-        //infoMenu.menu[++infoMenu.cur] = menuAirAssist;
+        infoMenu.menu[++infoMenu.cur] = menuAirAssist;
         break;
 
       case KEY_ICON_4:
-        //TODO: Create menu
-        //infoMenu.menu[++infoMenu.cur] = menuCaseFan;
+        infoMenu.menu[++infoMenu.cur] = menuCaseFan;
         break;
 
       case KEY_ICON_7:
