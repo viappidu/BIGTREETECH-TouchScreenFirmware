@@ -56,6 +56,7 @@ extern "C" {
 #define CONFIG_FAN_CTRL_COUNT         "fan_ctrl_count:"
 #define CONFIG_CASE_FAN               "case_fan:"
 #define CONFIG_AIR_ASSIST_TYPE        "air_assist_type:"
+#define CONFIG_AIR_ASSIST_FAN        "air_assist_fan:"
 #define CONFIG_MAX_TEMP               "max_temp:"
 #define CONFIG_MIN_TEMP               "min_temp:"
 #define CONFIG_FAN_MAX                "fan_max:"

@@ -60,6 +60,7 @@ void infoSettingsReset(void)
   infoSettings.fan_ctrl_count         = FAN_CTRL_NUM;
   infoSettings.case_fan               = CASE_FAN_NUM;
   infoSettings.air_assist_type        = AIR_ASSIST_TYPE;
+  infoSettings.air_assist_fan         = AIR_ASSIST_FAN;
   infoSettings.min_ext_temp           = PREVENT_COLD_EXTRUSION_MINTEMP;
   infoSettings.auto_load_leveling     = AUTO_SAVE_LOAD_BL_VALUE;
   infoSettings.touchmi_sensor         = TOUCHMI_SENSOR_VALUE;

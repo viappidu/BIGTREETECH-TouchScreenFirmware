@@ -124,6 +124,7 @@ typedef struct
   uint8_t  fan_ctrl_count;
   uint8_t  case_fan;
   uint8_t  air_assist_type;
+  uint8_t  air_assist_fan;
   uint16_t max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];
