@@ -29,12 +29,12 @@ typedef enum
 // Config version support
 // change if new elements/keywords are added/removed/changed in the configuration.h Format YYYYMMDD
 // this number should match CONFIG_VERSION in configuration.h
-#define CONFIG_SUPPPORT 20210217
+#define CONFIG_SUPPPORT 20210227
 
 #define FONT_FLASH_SIGN       20200908 //(YYYYMMDD) change if fonts require updating
-#define CONFIG_FLASH_SIGN     20210217 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
-#define LANGUAGE_FLASH_SIGN   20210217 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
-#define ICON_FLASH_SIGN       20210217 //(YYYYMMDD) change if any icon(s) is added or removed
+#define CONFIG_FLASH_SIGN     20210227 //(YYYYMMDD) change if any keyword(s) in config.ini is added or removed
+#define LANGUAGE_FLASH_SIGN   20210227 //(YYYYMMDD) change if any keyword(s) in language pack is added or removed
+#define ICON_FLASH_SIGN       20210227 //(YYYYMMDD) change if any icon(s) is added or removed
 
 #define FONT_CHECK_SIGN       (FONT_FLASH_SIGN + WORD_UNICODE)
 #define CONFIG_CHECK_SIGN     (CONFIG_FLASH_SIGN + STRINGS_STORE_ADDR)
@@ -70,6 +70,8 @@ typedef enum
 {
   MODE_MARLIN = 0,
   MODE_SERIAL_TSC,
+  MODE_LASER,
+  MODE_CNC,
   MODE_COUNT
 } LCD_MODE;
 
@@ -120,6 +122,8 @@ typedef struct
   uint8_t  ext_count;
   uint8_t  fan_count;
   uint8_t  fan_ctrl_count;
+  uint8_t  case_fan;
+  uint8_t  air_assist_type;
   uint16_t max_temp[MAX_HEATER_COUNT];  // chamber + bed + hotend
   uint16_t min_ext_temp;
   uint8_t  fan_max[MAX_FAN_COUNT];

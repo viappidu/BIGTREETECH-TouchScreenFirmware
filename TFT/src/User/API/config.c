@@ -681,6 +681,10 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_FAN_CTRL_COUNT:
       SET_VALID_INT_VALUE(infoSettings.fan_ctrl_count, 0, MAX_FAN_CTRL_COUNT);
       break;
+    
+    case C_INDEX_CASE_FAN:
+      SET_VALID_INT_VALUE(infoSettings.case_fan, 0, infoSettings.fan_count);
+      break;
 
     case C_INDEX_MAX_TEMP:
       if (key_seen("BED:")) SET_VALID_INT_VALUE(infoSettings.max_temp[BED], MIN_BED_TEMP, MAX_BED_TEMP);

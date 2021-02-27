@@ -777,7 +777,7 @@ GUI_POINT getIconStartPoint(int index)
     }
   }
 #endif //SMART_HOME
-
+//TODO: Missing code here?...
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
@@ -843,6 +843,7 @@ void loopBackEnd(void)
   }
 }  //loopBackEnd
 
+//TODO: Missing code here?...
 void loopFrontEnd(void)
 {
   // Check if volume source(SD/U disk) insert

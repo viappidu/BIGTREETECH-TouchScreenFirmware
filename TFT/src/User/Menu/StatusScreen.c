@@ -296,7 +296,10 @@ void menuStatus(void)
           break;
       #endif
       case KEY_MAINMENU:
-        infoMenu.menu[++infoMenu.cur] = menuMain;
+        if (infoSettings.mode == MODE_LASER || MODE_CNC)
+          infoMenu.menu[++infoMenu.cur] = menuLaserCncMain;
+        else
+          infoMenu.menu[++infoMenu.cur] = menuMain;
         break;
       case KEY_ICON_7:
         infoMenu.menu[++infoMenu.cur] = menuPrint;

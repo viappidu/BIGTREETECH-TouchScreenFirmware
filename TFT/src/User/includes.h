@@ -83,6 +83,7 @@
 
 //menu
 #include "MainPage.h"
+#include "LaserCncMainPage.h"
 #include "Heat.h"
 #include "PreheatMenu.h"
 #include "Move.h"
@@ -116,6 +117,7 @@
 
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
+#include "AirACaseFan.h"
 #include "StatusScreen.h"
 
 #include "Tuning.h"

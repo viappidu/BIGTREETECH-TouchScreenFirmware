@@ -8,13 +8,18 @@ bool skipMode = false;
 
 const GUI_RECT rect_of_mode[MODE_COUNT] = {
   //2 select icon
-  {1*SPACE_SELEX+0*ICON_WIDTH, SPACE_SELEY, 1*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
-  {3*SPACE_SELEX+1*ICON_WIDTH, SPACE_SELEY, 3*SPACE_SELEX+2*ICON_WIDTH, SPACE_SELEY+ICON_HEIGHT},
+   //4 select icon
+  {1*SPACE_SELEX+0*ICON_WIDTH, SPACE_Y-10, 1*SPACE_SELEX+1*ICON_WIDTH, SPACE_Y-10+ICON_HEIGHT},
+  {3*SPACE_SELEX+1*ICON_WIDTH, SPACE_Y-10, 3*SPACE_SELEX+2*ICON_WIDTH, SPACE_Y-10+ICON_HEIGHT},
+  {1*SPACE_SELEX+0*ICON_WIDTH, LCD_HEIGHT-SPACE_Y-10-ICON_HEIGHT, 1*SPACE_SELEX+1*ICON_WIDTH, LCD_HEIGHT-SPACE_Y-10},
+  {3*SPACE_SELEX+1*ICON_WIDTH, LCD_HEIGHT-SPACE_Y-10-ICON_HEIGHT, 3*SPACE_SELEX+2*ICON_WIDTH, LCD_HEIGHT-SPACE_Y-10},
 };
 
 const uint8_t icon_mode [MODE_COUNT]={
   ICON_MARLIN,
   ICON_BIGTREETECH,
+  ICON_LASERMODE,
+  ICON_CNCMODE,
 };
 
 void drawModeIcon(void)
@@ -27,11 +32,15 @@ void drawModeIcon(void)
   const GUI_RECT mode_title_rect[MODE_COUNT] = {
     {0,           rect_of_mode[0].y1 + BYTE_HEIGHT/2,   text_startx,  rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
     {text_startx, rect_of_mode[0].y1 + BYTE_HEIGHT/2,   LCD_WIDTH,    rect_of_mode[0].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
+    {0,           rect_of_mode[2].y1 + BYTE_HEIGHT/2,   text_startx,  rect_of_mode[2].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
+    {text_startx, rect_of_mode[2].y1 + BYTE_HEIGHT/2,   LCD_WIDTH,    rect_of_mode[2].y1 + BYTE_HEIGHT/2 + BYTE_HEIGHT},
   };
 
   GUI_RestoreColorDefault();
   GUI_DispStringInPrect(&mode_title_rect[0],(uint8_t *)"Marlin Mode");
   GUI_DispStringInPrect(&mode_title_rect[1],(uint8_t *)"Touch Mode");
+  GUI_DispStringInPrect(&mode_title_rect[2],(uint8_t *)"Laser Mode");
+  GUI_DispStringInPrect(&mode_title_rect[3],(uint8_t *)"CNC Mode");
 }
 
 bool LCD_ReadPen(uint16_t intervals)
@@ -119,7 +128,8 @@ void menuMode(void)
   {
     MKEY_VALUES key_num = MKeyGetValue();
 
-    if (key_num == MKEY_0 || key_num == MKEY_1)
+    if (key_num == MKEY_0 || key_num == MKEY_1 ||
+      key_num == MKEY_2 || key_num == MKEY_3)
     {
       nowMode = key_num;
       break;
@@ -143,7 +153,8 @@ void menuMode(void)
       loopDimTimer();
     #endif
 
-    if (infoSettings.mode == MODE_SERIAL_TSC || infoSettings.serial_alwaysOn == 1)
+    if (infoSettings.mode == MODE_SERIAL_TSC || infoSettings.serial_alwaysOn == 1
+    || infoSettings.mode == MODE_LASER || infoSettings.mode == MODE_CNC)
       loopBackEnd();
   }
 
@@ -159,7 +170,7 @@ void menuMode(void)
 // Setup hardware for selected UI mode
 static inline void setupModeHardware(uint8_t mode)
 {
-  if (mode == MODE_SERIAL_TSC)
+  if (mode == MODE_SERIAL_TSC || mode == MODE_LASER || mode == MODE_CNC)
   {
     Serial_ReSourceInit();  // enable serial comm in TSC mode
     #ifdef BUZZER_PIN // enable buzzer in Touchsreen mode
@@ -203,6 +214,7 @@ static inline void setupModeHardware(uint8_t mode)
 }
 
 // Change UI Mode
+//TODO: Check mode switch
 void switchMode(void)
 {
   infoMenu.cur = 0;
@@ -211,11 +223,16 @@ void switchMode(void)
   switch(infoSettings.mode)
   {
     case MODE_SERIAL_TSC:
+    case MODE_LASER:
+    case MODE_CNC:
       GUI_RestoreColorDefault();
       if(infoSettings.status_screen == 1)  //if Unified menu is selected
         infoMenu.menu[infoMenu.cur] = menuStatus;  //status screen as default screen on boot
       else
-        infoMenu.menu[infoMenu.cur] = menuMain;  // classic UI
+        if(infoSettings.mode == MODE_LASER || infoSettings.mode == MODE_CNC)
+          infoMenu.menu[infoMenu.cur] = menuLaserCncMain;  // Laser/CNC UI
+        else 
+          infoMenu.menu[infoMenu.cur] = menuMain;  // classic UI
 
       #ifdef SHOW_BTT_BOOTSCREEN
         if (freshBoot)

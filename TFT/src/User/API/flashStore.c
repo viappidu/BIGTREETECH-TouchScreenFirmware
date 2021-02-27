@@ -3,7 +3,8 @@
 #include "STM32_Flash.h"
 
 #define TSC_SIGN  0x20200512 // DO NOT MODIFY
-#define PARA_SIGN 0x20210130 // (YYYYMMDD) If a new setting parameter is added,
+//TODO: IMPORTANT: Always remomber to fix this
+#define PARA_SIGN 0x20210227 // (YYYYMMDD) If a new setting parameter is added,
                              // modify here and initialize the initial value
                              // in the "infoSettingsReset()" function
 enum
