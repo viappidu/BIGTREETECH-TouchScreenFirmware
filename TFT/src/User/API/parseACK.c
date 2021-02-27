@@ -455,12 +455,16 @@ void parseACK(void)
         speedQuerySetWait(false);
       }
     // parse fan speed
+    //TODO: check this one
       else if (ack_seen("M106 P"))
       {
         uint8_t i = ack_value();
         if (ack_seen("S"))
         {
-          fanSetCurSpeed(i, ack_value());
+          // if (i == infoSettings.case_fan)
+          //   caseFanSetCurSpeed(ack_value());
+          // else
+            fanSetCurSpeed(i, ack_value());
         }
       }
     // parse controller fan

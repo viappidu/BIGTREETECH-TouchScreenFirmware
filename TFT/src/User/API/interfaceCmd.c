@@ -551,20 +551,32 @@ void sendQueueCmd(void)
             }
           }
           break;
-
+        //TODO: work this out!!!
         case 106: //M106
         {
-          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-          if (cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
-          {
-            fanSetCurSpeed(i, cmd_value());
-          }
-          else if (!cmd_seen('\n'))
-          {
-            char buf[12];
-            sprintf(buf, "S%u\n", fanGetCurSpeed(i));
-            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-          }
+          //CaseFan and AirAssit workaround
+          // if (cmd_seen('C'))
+          // {
+
+          // }
+          // else if(cmd_seen('A'))
+          // {
+
+          // }
+          // else
+          // {
+            uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+            if (cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
+            {
+              fanSetCurSpeed(i, cmd_value());
+            }
+            else if (!cmd_seen('\n'))
+            {
+              char buf[12];
+              sprintf(buf, "S%u\n", fanGetCurSpeed(i));
+              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+            }
+          // }
           break;
         }
 

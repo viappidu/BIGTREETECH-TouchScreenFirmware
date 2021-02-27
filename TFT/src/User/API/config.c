@@ -683,7 +683,14 @@ void parseConfigKey(uint16_t index)
       break;
     
     case C_INDEX_CASE_FAN:
-      SET_VALID_INT_VALUE(infoSettings.case_fan, 0, infoSettings.fan_count);
+      SET_VALID_INT_VALUE(infoSettings.case_fan, 0, MAX_FAN_COUNT);
+      break;
+
+    case C_INDEX_AIR_ASSIST_TYPE:
+      SET_VALID_INT_VALUE(infoSettings.air_assist_type, 0, 4);
+      break;
+    case C_INDEX_AIR_ASSIST_FAN:
+      SET_VALID_INT_VALUE(infoSettings.air_assist_fan, 0, MAX_FAN_COUNT);
       break;
 
     case C_INDEX_MAX_TEMP:

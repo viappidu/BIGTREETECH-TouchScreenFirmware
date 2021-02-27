@@ -57,7 +57,7 @@ void loopCaseFan(void)
 {
   if ((lastSetCaseFanSpeed != setCaseFanSpeed) && (OS_GetTimeMs() > nextCaseFanTime))
   {
-    if (storeCmd("M106 P%s S%d\n", infoSettings.case_fan, setCaseFanSpeed))
+    if (storeCmd("M106 P%d S%d\n", infoSettings.case_fan, setCaseFanSpeed))
         lastSetCaseFanSpeed = setCaseFanSpeed;
     nextCaseFanTime = OS_GetTimeMs() + NEXT_FAN_WAIT; // avoid rapid fire, clogging the queue
   }

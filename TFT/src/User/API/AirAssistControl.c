@@ -74,7 +74,7 @@ void loopAirAssist(void)
 {
   if ((lastSetAirAssistSpeed != setAirAssistSpeed) && (OS_GetTimeMs() > nextAirAssistTime))
   {
-    if (storeCmd("M106 P%s S%d\n", infoSettings.case_fan, setAirAssistSpeed))
+    if (storeCmd("M106 P%d S%d\n", (char)infoSettings.air_assist_type, setAirAssistSpeed))
         lastSetAirAssistSpeed = setAirAssistSpeed;
     nextAirAssistTime = OS_GetTimeMs() + NEXT_AIRPUMP_WAIT; // avoid rapid fire, clogging the queue
   }
