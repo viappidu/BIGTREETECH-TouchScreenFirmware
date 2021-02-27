@@ -128,6 +128,9 @@
 #include "MeshEditor.h"
 #include "CaseLight.h"
 
+#include "AirAssist.h"
+#include "CaseFan.h"
+
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);
 
