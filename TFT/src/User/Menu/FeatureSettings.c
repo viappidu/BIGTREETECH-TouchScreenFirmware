@@ -51,7 +51,8 @@ const char *const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
 //
 typedef enum
 {
-  SKEY_TERMINAL_ACK = 0,
+  SKEY_STATUS_SCREEN = 0,
+  SKEY_TERMINAL_ACK,
   SKEY_PERSISTENT_INFO,
   SKEY_FILE_LIST_MODE,
   SKEY_ACK_NOTIFICATION,
@@ -96,6 +97,7 @@ int fe_cur_page = 0;
 //set item types
 //
 LISTITEM settingPage[SKEY_COUNT] = {
+  {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_STATUS_SCREEN,           LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TERMINAL_ACK,            LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_PERSISTENT_INFO,         LABEL_BACKGROUND},
   {ICONCHAR_TOGGLE_ON,   LIST_TOGGLE,        LABEL_FILE_LIST_MODE,          LABEL_BACKGROUND},
@@ -150,6 +152,11 @@ void updateFeatureSettings(uint8_t key_val)
 
   switch (item_index)
   {
+    case SKEY_STATUS_SCREEN:
+      infoSettings.status_screen = (infoSettings.status_screen + 1) % ITEM_TOGGLE_NUM;
+      settingPage[item_index].icon = iconToggle[infoSettings.status_screen];
+      break;
+
     case SKEY_TERMINAL_ACK:
       infoSettings.terminalACK = (infoSettings.terminalACK + 1) % ITEM_TOGGLE_NUM;
       settingPage[item_index].icon = iconToggle[infoSettings.terminalACK];
@@ -284,6 +291,10 @@ void loadFeatureSettings()
     {
       switch (item_index)
       {
+        case SKEY_STATUS_SCREEN:
+          settingPage[item_index].icon = iconToggle[infoSettings.status_screen];
+          break;
+
         case SKEY_TERMINAL_ACK:
           settingPage[item_index].icon = iconToggle[infoSettings.terminalACK];
           break;
