@@ -303,6 +303,7 @@
     #define STRING_AIR_ASSIST              "Air assist"
     #define STRING_TOUCH_TO_EXIT          "Touch anywhere to exit"
     #define STRING_MAINMENU               "Menu"
+    //TODO: fixe the temp menu name (LC)
     #define STRING_LASERCNCMAINMENU       "MenuLC"
     #define STRING_LASER_CNC              "Laser/CNC"
     #define STRING_PARAMETER_SETTING      "Parameter Settings"
