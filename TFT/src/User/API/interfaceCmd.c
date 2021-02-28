@@ -232,6 +232,32 @@ void sendQueueCmd(void)
           if (isPrinting())
             setPrintPause(true,true);
           break;
+        //TODO: Laser/Spindle commands
+        case 3:
+        {
+          (false);
+          break;
+        }
+        case 4:
+        {
+          (false);
+          break;
+        }
+        case 5:
+        {
+          (false);
+          break;
+        }
+        case 7:
+        {
+          airAssistSendWaiting(false);
+          break;
+        }
+        case 9:
+        {
+          airAssistSendWaiting(false);
+          break;
+        }
         case 18: //M18/M84 disable steppers
         case 84:
           if (cmd_seen('S') && !cmd_seen('Y') && !cmd_seen('Z') && !cmd_seen('E'))
@@ -551,32 +577,19 @@ void sendQueueCmd(void)
             }
           }
           break;
-        //TODO: work this out!!!
         case 106: //M106
         {
-          //CaseFan and AirAssit workaround
-          // if (cmd_seen('C'))
-          // {
-
-          // }
-          // else if(cmd_seen('A'))
-          // {
-
-          // }
-          // else
-          // {
-            uint8_t i = cmd_seen('P') ? cmd_value() : 0;
-            if (cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
-            {
-              fanSetCurSpeed(i, cmd_value());
-            }
-            else if (!cmd_seen('\n'))
-            {
-              char buf[12];
-              sprintf(buf, "S%u\n", fanGetCurSpeed(i));
-              strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
-            }
-          // }
+          uint8_t i = cmd_seen('P') ? cmd_value() : 0;
+          if (cmd_seen('S') && fanIsType(i, FAN_TYPE_F) )
+          {
+            fanSetCurSpeed(i, cmd_value());
+          }
+          else if (!cmd_seen('\n'))
+          {
+            char buf[12];
+            sprintf(buf, "S%u\n", fanGetCurSpeed(i));
+            strcat(infoCmd.queue[infoCmd.index_r].gcode,(const char*)buf);
+          }
           break;
         }
 

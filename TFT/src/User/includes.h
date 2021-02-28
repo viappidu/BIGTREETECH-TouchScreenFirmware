@@ -70,7 +70,6 @@
 #include "ProbeHeightControl.h"
 #include "HomeOffsetControl.h"
 #include "CaseLightControl.h"
-#include "CaseFanControl.h"
 #include "AirAssistControl.h"
 
 #include "extend.h"

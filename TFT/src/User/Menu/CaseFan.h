@@ -8,6 +8,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+uint8_t caseFanIndex;
 void menuCaseFan(void);
 
 

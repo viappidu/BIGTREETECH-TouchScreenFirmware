@@ -1,19 +1,30 @@
 #include "AirAssist.h"
 #include "includes.h"
 
-void airAssistSpeedReDraw()
+void airAssistValueReDraw(bool skip_header)
 {
   char tempstr[20];
+  
+  if (!skip_header)
+  {
+    setLargeFont(true);
+    if (infoSettings.air_assist_type != 1)
+    {
+      if (infoSettings.fan_percentage == 1)
+        GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+      else
+        GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
+    }
+    setLargeFont(false);
+  }
 
   if (infoSettings.air_assist_type == 1)
-    sprintf(tempstr, "  %s  ", airAssistGetState() ? LABEL_ON : LABEL_OFF);
+    sprintf(tempstr, "  %s  ", airAssistGetState() ? textSelect(LABEL_ON) : textSelect(LABEL_OFF));
+  else if (infoSettings.fan_percentage == 1)
+    sprintf(tempstr, "  %d/%d  ",  fanGetCurPercent(infoSettings.case_fan), fanGetSetPercent(infoSettings.case_fan));
   else
-  {
-    if (infoSettings.fan_percentage == 1)
-      sprintf(tempstr, "  %d/%d  ", airAssistGetCurPercent(), airAssistGetSetPercent());
-    else
-      sprintf(tempstr, "  %d/%d  ", (int)airAssistGetCurSpeed(), (int)airAssistGetSetSpeed());
-  }
+    sprintf(tempstr, "  %d/%d  ", (int)fanGetCurSpeed(infoSettings.case_fan), (int)fanGetSetSpeed(infoSettings.case_fan));
+
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
@@ -51,11 +62,23 @@ void menuAirAssist(void)
 
   }
 
-  if (infoSettings.air_assist_type != 1)
-    airAssistSetSpeed(airAssistGetCurSpeed());
+  LASTFAN lastFan;
+  switch (infoSettings.air_assist_type)
+  {
+    case 1:
+      break;
+    
+    case 2:
+      fanSetSpeed(infoSettings.air_assist_fan, fanGetCurSpeed(infoSettings.air_assist_fan));
+      break;
+    case 3:
+      break;
+    default:
+      break;
+  }
 
   menuDrawPage(&airAssistItems);
-  airAssistSpeedReDraw();
+  airAssistValueReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -67,78 +90,72 @@ void menuAirAssist(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (infoSettings.air_assist_type != 1)
+        if (fanGetSetSpeed(infoSettings.air_assist_fan) > 0)
         {
-          if (airAssistGetSetSpeed() > 0)
-          {
-            if (infoSettings.fan_percentage == 1)
-              airAssistSetPercent(airAssistGetSetPercent() - 1);
-            else
-              airAssistSetSpeed(airAssistGetSetSpeed() - 1);
-          }
+          if (infoSettings.fan_percentage == 1)
+            fanSetPercent(infoSettings.air_assist_fan, fanGetSetPercent(infoSettings.air_assist_fan) - 1);
+          else
+            fanSetSpeed(infoSettings.air_assist_fan, fanGetSetSpeed(infoSettings.air_assist_fan) - 1);
         }
         break;
 
       case KEY_INFOBOX:
       {
-        char titlestr[30];
         if (infoSettings.air_assist_type != 1)
         {
+          char titlestr[30];
           if (infoSettings.fan_percentage == 1)
           {
             strcpy(titlestr, "Min:0 | Max:100");
-            uint8_t val = numPadInt((u8 *) titlestr, airAssistGetSetPercent(), 0, false);
+            uint8_t val = numPadInt((u8 *) titlestr, fanGetSetPercent(infoSettings.air_assist_fan), 0, false);
             val = NOBEYOND(0, val, 100);
 
-            if (val != airAssistGetSetPercent())
-              airAssistSetPercent(val);
+            if (val != fanGetSetPercent(infoSettings.air_assist_fan))
+              fanSetPercent(infoSettings.air_assist_fan, val);
           }
           else
           {
-            sprintf(titlestr, "Min:0 | Max:%d", 255);
-            uint8_t val = numPadInt((u8 *) titlestr, airAssistGetCurSpeed(), 0, false);
-            val = NOBEYOND(0, val,  255);
+            sprintf(titlestr, "Min:0 | Max:%d", infoSettings.fan_max[infoSettings.air_assist_fan]);
+            uint8_t val = numPadInt((u8 *) titlestr, fanGetCurSpeed(infoSettings.air_assist_fan), 0, false);
+            val = NOBEYOND(0, val,  infoSettings.fan_max[infoSettings.air_assist_fan]);
 
-            if (val != airAssistGetCurSpeed())
-              airAssistSetSpeed(val);
+            if (val != fanGetCurSpeed(infoSettings.air_assist_fan))
+              fanSetSpeed(infoSettings.air_assist_fan, val);
           }
 
           menuDrawPage(&airAssistItems);
-          airAssistSpeedReDraw();
+          airAssistValueReDraw(true);
         }
         break;
       }
 
       case KEY_ICON_3:
-        if (infoSettings.air_assist_type != 1)
+        if (fanGetSetSpeed(infoSettings.air_assist_fan) < infoSettings.fan_max[infoSettings.air_assist_fan])
         {
-          if (airAssistGetSetSpeed() < 255)
-          {
-            if (infoSettings.fan_percentage == 1)
-              airAssistSetPercent(airAssistGetSetPercent() + 1);
-            else
-              airAssistSetSpeed( airAssistGetSetSpeed() + 1);
-          }
+          if (infoSettings.fan_percentage == 1)
+            fanSetPercent(infoSettings.air_assist_fan, fanGetSetPercent(infoSettings.air_assist_fan) + 1);
+          else
+            fanSetSpeed(infoSettings.air_assist_fan, fanGetSetSpeed(infoSettings.air_assist_fan) + 1);
         }
         break;
 
       case KEY_ICON_4:
         if (infoSettings.air_assist_type != 1)
-          airAssistSetSpeed(255 / 2);  // 50%
+          fanSetSpeed(infoSettings.air_assist_fan, infoSettings.fan_max[infoSettings.air_assist_fan] / 2);  // 50%
         else
           airAssistSetState(true);
+        airAssistValueReDraw(true);
         break;
 
       case KEY_ICON_5:
         if (infoSettings.air_assist_type != 1)
-          airAssistSetSpeed(255);
+          fanSetSpeed(infoSettings.air_assist_fan, infoSettings.fan_max[infoSettings.air_assist_fan]);
         else
           airAssistSetState(false);
         break;
 
       case KEY_ICON_6:
-        if (infoSettings.air_assist_type != 1)
-          airAssistSetSpeed(0);
+        fanSetSpeed(infoSettings.air_assist_fan, 0);
         break;
 
       case KEY_ICON_7:
@@ -151,20 +168,20 @@ void menuAirAssist(void)
           #if LCD_ENCODER_SUPPORT
             if (encoderPosition)
             {
-              if (airAssistGetSetSpeed() < 255 && encoderPosition > 0)
+              if (fanGetSetSpeed(infoSettings.air_assist_fan) < infoSettings.fan_max[infoSettings.air_assist_fan] && encoderPosition > 0)
               {
                 if (infoSettings.fan_percentage == 1)
-                  airAssistSetPercent(airAssistGetSetPercent() + 1);
+                  fanSetPercent(infoSettings.air_assist_fan, fanGetSetPercent(infoSettings.air_assist_fan) + 1);
                 else
-                  airAssistSetSpeed(airAssistGetSetSpeed() + 1);
+                  fanSetSpeed(infoSettings.air_assist_fan, fanGetSetSpeed(infoSettings.air_assist_fan) + 1);
               }
 
-              if (airAssistGetSetSpeed() > 0 && encoderPosition < 0)
+              if (fanGetSetSpeed(infoSettings.air_assist_fan) > 0 && encoderPosition < 0)
               {
                 if (infoSettings.fan_percentage == 1)
-                  airAssistSetPercent(airAssistGetSetPercent() - 1);
+                  fanSetPercent(infoSettings.air_assist_fan, fanGetSetPercent(infoSettings.air_assist_fan) - 1);
                 else
-                  airAssistSetSpeed(airAssistGetSetSpeed() - 1);
+                  fanSetSpeed(infoSettings.air_assist_fan, fanGetSetSpeed(infoSettings.air_assist_fan) - 1);
               }
               encoderPosition = 0;
             }
@@ -173,6 +190,14 @@ void menuAirAssist(void)
         break;
     }
 
+    if (infoSettings.air_assist_type != 1)
+    {
+      if ((lastFan.cur != fanGetCurSpeed(infoSettings.air_assist_fan)) || (lastFan.set != fanGetSetSpeed(infoSettings.air_assist_fan)))
+      {
+        lastFan = (LASTFAN) {fanGetCurSpeed(infoSettings.air_assist_fan), fanGetSetSpeed(infoSettings.air_assist_fan)};
+        airAssistValueReDraw(true);
+      }
+    }
     loopProcess();
   }
 }

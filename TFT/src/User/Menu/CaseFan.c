@@ -1,14 +1,28 @@
 #include "CaseFan.h"
 #include "includes.h"
 
-void caseFanSpeedReDraw()
+void caseFanSpeedReDraw(bool skip_header)
 {
   char tempstr[20];
 
+  if (!skip_header)
+  {
+    setLargeFont(true);
+    if (infoSettings.fan_percentage == 1)
+    {
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+    }
+    else
+    {
+      GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
+    }
+    setLargeFont(false);
+  }
+
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "  %d/%d  ", caseFanGetCurPercent(), caseFanGetSetPercent());
+    sprintf(tempstr, "  %d/%d  ",  fanGetCurPercent(infoSettings.case_fan), fanGetSetPercent(infoSettings.case_fan));
   else
-    sprintf(tempstr, "  %d/%d  ", (int)caseFanGetCurSpeed(), (int)caseFanGetSetSpeed());
+    sprintf(tempstr, "  %d/%d  ", (int)fanGetCurSpeed(infoSettings.case_fan), (int)fanGetSetSpeed(infoSettings.case_fan));
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
@@ -32,10 +46,11 @@ void menuCaseFan(void)
      {ICON_BACK,                    LABEL_BACK},}
   };
 
-  caseFanSetSpeed(caseFanGetCurSpeed());
+  LASTFAN lastFan;
+  fanSetSpeed(infoSettings.case_fan, fanGetCurSpeed(infoSettings.case_fan));
 
   menuDrawPage(&caseFanItems);
-  caseFanSpeedReDraw();
+  caseFanSpeedReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -47,12 +62,12 @@ void menuCaseFan(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (caseFanGetSetSpeed() > 0)
+        if (fanGetSetSpeed(infoSettings.case_fan) > 0)
         {
           if (infoSettings.fan_percentage == 1)
-            caseFanSetPercent(caseFanGetSetPercent() - 1);
+            fanSetPercent(infoSettings.case_fan, fanGetSetPercent(infoSettings.case_fan) - 1);
           else
-            caseFanSetSpeed(caseFanGetSetSpeed() - 1);
+            fanSetSpeed(infoSettings.case_fan, fanGetSetSpeed(infoSettings.case_fan) - 1);
         }
         break;
 
@@ -62,47 +77,48 @@ void menuCaseFan(void)
         if (infoSettings.fan_percentage == 1)
         {
           strcpy(titlestr, "Min:0 | Max:100");
-          uint8_t val = numPadInt((u8 *) titlestr, caseFanGetSetPercent(), 0, false);
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetSetPercent(infoSettings.case_fan), 0, false);
           val = NOBEYOND(0, val, 100);
 
-          if (val != caseFanGetSetPercent())
-            caseFanSetPercent(val);
+          if (val != fanGetSetPercent(infoSettings.case_fan))
+            fanSetPercent(infoSettings.case_fan, val);
         }
         else
         {
-          sprintf(titlestr, "Min:0 | Max:%d", 255);
-          uint8_t val = numPadInt((u8 *) titlestr, caseFanGetCurSpeed(), 0, false);
-          val = NOBEYOND(0, val,  255);
+          sprintf(titlestr, "Min:0 | Max:%d", infoSettings.fan_max[infoSettings.case_fan]);
+          uint8_t val = numPadInt((u8 *) titlestr, fanGetCurSpeed(infoSettings.case_fan), 0, false);
+          val = NOBEYOND(0, val,  infoSettings.fan_max[infoSettings.case_fan]);
 
-          if (val != caseFanGetCurSpeed())
-            caseFanSetSpeed(val);
+          if (val != fanGetCurSpeed(infoSettings.case_fan))
+            fanSetSpeed(infoSettings.case_fan, val);
         }
 
         menuDrawPage(&caseFanItems);
-        caseFanSpeedReDraw();
+        caseFanSpeedReDraw(true);
         break;
       }
 
       case KEY_ICON_3:
-        if (caseFanGetSetSpeed() < 255)
+        if (fanGetSetSpeed(infoSettings.case_fan) < infoSettings.fan_max[infoSettings.case_fan])
         {
           if (infoSettings.fan_percentage == 1)
-            caseFanSetPercent(caseFanGetSetPercent() + 1);
+            fanSetPercent(infoSettings.case_fan, fanGetSetPercent(infoSettings.case_fan) + 1);
           else
-            caseFanSetSpeed( caseFanGetSetSpeed() + 1);
+            fanSetSpeed(infoSettings.case_fan, fanGetSetSpeed(infoSettings.case_fan) + 1);
         }
         break;
 
       case KEY_ICON_4:
-        caseFanSetSpeed(255 / 2);  // 50%
+        fanSetSpeed(infoSettings.case_fan, infoSettings.fan_max[infoSettings.case_fan] / 2);  // 50%
+        caseFanSpeedReDraw(true);
         break;
 
       case KEY_ICON_5:
-        caseFanSetSpeed(255);
+        fanSetSpeed(infoSettings.case_fan, infoSettings.fan_max[infoSettings.case_fan]);
         break;
 
       case KEY_ICON_6:
-        caseFanSetSpeed(0);
+        fanSetSpeed(infoSettings.case_fan, 0);
         break;
 
       case KEY_ICON_7:
@@ -113,20 +129,20 @@ void menuCaseFan(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            if (caseFanGetSetSpeed() < 255 && encoderPosition > 0)
+            if (fanGetSetSpeed(infoSettings.case_fan) < infoSettings.fan_max[infoSettings.case_fan] && encoderPosition > 0)
             {
               if (infoSettings.fan_percentage == 1)
-                caseFanSetPercent(caseFanGetSetPercent() + 1);
+                fanSetPercent(infoSettings.case_fan, fanGetSetPercent(infoSettings.case_fan) + 1);
               else
-                caseFanSetSpeed(caseFanGetSetSpeed() + 1);
+                fanSetSpeed(infoSettings.case_fan, fanGetSetSpeed(infoSettings.case_fan) + 1);
             }
 
-            if (caseFanGetSetSpeed() > 0 && encoderPosition < 0)
+            if (fanGetSetSpeed(infoSettings.case_fan) > 0 && encoderPosition < 0)
             {
               if (infoSettings.fan_percentage == 1)
-                caseFanSetPercent(caseFanGetSetPercent() - 1);
+                fanSetPercent(infoSettings.case_fan, fanGetSetPercent(infoSettings.case_fan) - 1);
               else
-                caseFanSetSpeed(caseFanGetSetSpeed() - 1);
+                fanSetSpeed(infoSettings.case_fan, fanGetSetSpeed(infoSettings.case_fan) - 1);
             }
             encoderPosition = 0;
           }
@@ -134,6 +150,11 @@ void menuCaseFan(void)
         break;
     }
 
+    if ((lastFan.cur != fanGetCurSpeed(infoSettings.case_fan)) || (lastFan.set != fanGetSetSpeed(infoSettings.case_fan)))
+    {
+      lastFan = (LASTFAN) {fanGetCurSpeed(infoSettings.case_fan), fanGetSetSpeed(infoSettings.case_fan)};
+      caseFanSpeedReDraw(true);
+    }
     loopProcess();
   }
 }
