@@ -794,8 +794,12 @@ void loopBackEnd(void)
   loopFan();
   // Speed & flow monitor
   loopSpeed();
+  // Case fan
+  //TODO: Is this needed? What about type 3?
+  //if (infoSettings.case_fan_type == 1)
+    //loopCaseFan();
   // Air assist
-  //TODO: What about type 3?
+  //TODO: Is this needed? What about type 3?
   if (infoSettings.air_assist_type == 1)
     loopAirAssist();
 #ifdef SMART_HOME
@@ -807,10 +811,10 @@ void loopBackEnd(void)
   loopBuzzer();
 #endif
 
-  if (infoMachineSettings.onboard_sd_support == ENABLED)
-  {
-    loopCheckPrinting();  //Check if there is a SD or USB print running.
-  }
+if (infoMachineSettings.onboard_sd_support == ENABLED)
+{
+  loopCheckPrinting();  //Check if there is a SD or USB print running.
+}
 
 #ifdef U_DISK_SUPPORT
   USBH_Process(&USB_OTG_Core, &USB_Host);

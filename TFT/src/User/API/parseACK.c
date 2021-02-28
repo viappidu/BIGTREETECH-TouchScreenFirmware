@@ -454,8 +454,36 @@ void parseACK(void)
         speedSetCurPercent(1,ack_value());
         speedQuerySetWait(false);
       }
+    // parse laser
+    //TODO: SHould also consider Gx 'S' commands?
+      else if (ack_seen("M3"))
+      {
+        
+      }
+      else if (ack_seen("M4"))
+      {
+        
+      }
+      else if (ack_seen("M5"))
+      {
+        
+      }
+    // parse coolant controls
+      else if (ack_seen("M7"))
+      {
+        airAssistSetState(true);
+
+      }
+      //TODO Coolant flood implementation
+      // else if (ack_seen("M8"))
+      // {
+        
+      // }
+      else if (ack_seen("M9"))
+      {
+        airAssistSetState(false);
+      }
     // parse fan speed
-    //TODO: check this one
       else if (ack_seen("M106 P"))
       {
         uint8_t i = ack_value();

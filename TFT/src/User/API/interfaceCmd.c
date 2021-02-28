@@ -235,27 +235,26 @@ void sendQueueCmd(void)
         //TODO: Laser/Spindle commands
         case 3:
         {
-          (false);
           break;
         }
         case 4:
         {
-          (false);
           break;
         }
         case 5:
         {
-          (false);
           break;
         }
         case 7:
         {
-          airAssistSendWaiting(false);
+          //TODO Possibly not needed. disabling now
+          //airAssistSendWaiting(false);
           break;
         }
         case 9:
         {
-          airAssistSendWaiting(false);
+          //TODO Possibly not needed. disabling now
+          //airAssistSendWaiting(false);
           break;
         }
         case 18: //M18/M84 disable steppers

@@ -1,6 +1,9 @@
 #include "AirAssist.h"
 #include "includes.h"
 
+
+//TODO: move type=1 logic to common menu
+
 void airAssistValueReDraw(bool skip_header)
 {
   char tempstr[20];
@@ -11,7 +14,7 @@ void airAssistValueReDraw(bool skip_header)
     if (infoSettings.air_assist_type != 1)
     {
       if (infoSettings.fan_percentage == 1)
-        GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+              GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
       else
         GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
     }
@@ -89,8 +92,9 @@ void menuAirAssist(void)
     KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
+      //TODO: Fix for type 1?
       case KEY_ICON_0:
-        if (fanGetSetSpeed(infoSettings.air_assist_fan) > 0)
+        if (fanGetSetSpeed(infoSettings.air_assist_fan) != 1)
         {
           if (infoSettings.fan_percentage == 1)
             fanSetPercent(infoSettings.air_assist_fan, fanGetSetPercent(infoSettings.air_assist_fan) - 1);
@@ -144,6 +148,7 @@ void menuAirAssist(void)
           fanSetSpeed(infoSettings.air_assist_fan, infoSettings.fan_max[infoSettings.air_assist_fan] / 2);  // 50%
         else
           airAssistSetState(true);
+
         airAssistValueReDraw(true);
         break;
 
@@ -152,10 +157,13 @@ void menuAirAssist(void)
           fanSetSpeed(infoSettings.air_assist_fan, infoSettings.fan_max[infoSettings.air_assist_fan]);
         else
           airAssistSetState(false);
+        
+        airAssistValueReDraw(true);
         break;
 
       case KEY_ICON_6:
-        fanSetSpeed(infoSettings.air_assist_fan, 0);
+        if (infoSettings.air_assist_type != 1)
+          fanSetSpeed(infoSettings.air_assist_fan, 0);
         break;
 
       case KEY_ICON_7:
