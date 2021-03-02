@@ -554,7 +554,7 @@ void sendQueueCmd(void)
         //TODO: work this out!!!
         case 106: //M106
         {
-          //CaseFan and AirAssit workaround
+          //ChamberFan and AirAssit workaround
           // if (cmd_seen('C'))
           // {
 

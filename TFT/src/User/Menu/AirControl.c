@@ -1,7 +1,7 @@
-#include "AirACaseFan.h"
+#include "AirControl.h"
 #include "includes.h"
 
-const MENUITEMS AirACaseFanItems = {
+const MENUITEMS AirControlItems = {
   // title
   LABEL_UNIFIEDHEAT,
   // icon                         label
@@ -9,18 +9,18 @@ const MENUITEMS AirACaseFanItems = {
    {ICON_BACKGROUND,              LABEL_BACKGROUND},
    {ICON_BACKGROUND,              LABEL_BACKGROUND},
    {ICON_BACKGROUND,              LABEL_BACKGROUND},
-   {ICON_CASE_FAN,                LABEL_CASE_FAN},
+   {ICON_CHAMBER_FAN,             LABEL_CHAMBER_FAN},
    {ICON_BACKGROUND,              LABEL_BACKGROUND},
    {ICON_BACKGROUND,              LABEL_BACKGROUND},
    {ICON_BACK,                    LABEL_BACK},}
 };
-//TODO: Refine menu items with check if we need submenus. eg. case_fan=0 or air_assist=1
-void menuAirACaseFan(void)
+//TODO: Refine menu items with check if we need submenus. eg. chamber_fan=0 or air_assist=1
+void menuAirControl(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  menuDrawPage(&AirACaseFanItems);
+  menuDrawPage(&AirControlItems);
 
-  while(infoMenu.menu[infoMenu.cur] == menuAirACaseFan)
+  while(infoMenu.menu[infoMenu.cur] == menuAirControl)
   {
     key_num = menuKeyGetValue();
     switch (key_num)
@@ -30,7 +30,7 @@ void menuAirACaseFan(void)
         break;
 
       case KEY_ICON_4:
-        infoMenu.menu[++infoMenu.cur] = menuCaseFan;
+        infoMenu.menu[++infoMenu.cur] = menuChamberFan;
         break;
 
       case KEY_ICON_7:

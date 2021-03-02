@@ -1,6 +1,6 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
-#define CONFIG_VERSION 20210227
+#define CONFIG_VERSION 20210302
 
 //===========================================================================
 //============================= General Settings ============================
@@ -130,14 +130,15 @@
 //=========================== Machine Settings ==============================
 //===========================================================================
 
-#define HOTEND_NUM      1  // set in 1~6
-#define EXTRUDER_NUM    1  // set in 1~6
-#define FAN_NUM         1  // set in 1~6
-#define FAN_CTRL_NUM    0  // set in 1~2
-#define CASE_FAN_NUM    0  // Default: 0 for disabled
-#define AIR_ASSIST_TYPE 0  // Default: 0 for disabled
-#define AIR_ASSIST_FAN  0  // Default: 0 for disabled
-#define MIXING_EXTRUDER 0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
+#define HOTEND_NUM          1  // set in 1~6
+#define EXTRUDER_NUM        1  // set in 1~6
+#define FAN_NUM             1  // set in 1~6
+#define FAN_CTRL_NUM        0  // set in 1~2
+#define CHAMBER_FAN_TYPE    0  // Default: 0 for disabled
+#define CHAMBER_FAN_NUM     0  // Default: 0 for disabled
+#define AIR_ASSIST_TYPE     0  // Default: 0 for disabled
+#define AIR_ASSIST_FAN_NUM  0  // Default: 0 for disabled
+#define MIXING_EXTRUDER     0  // Default: 0. For mixing_extruder set to 1 (This option turns off autodetection
                            // of the number of extruders)
 
 #define PREHEAT_LABELS   {"PLA", "PETG", "ABS", "WOOD", "TPU", "NYLON"}

@@ -1,11 +1,11 @@
-#ifndef _AIRACASEFAN_H_
-#define _AIRACASEFAN_H_
+#ifndef _AIRCONTROL_H_
+#define _AIRCONTROL_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void menuAirACaseFan(void);
+void menuAirControl(void);
 
 #ifdef __cplusplus
 }

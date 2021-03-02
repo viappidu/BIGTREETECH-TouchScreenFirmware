@@ -1,26 +1,26 @@
-#include "CaseFan.h"
+#include "ChamberFan.h"
 #include "includes.h"
 
-void caseFanSpeedReDraw()
+void chamberFanSpeedReDraw()
 {
   char tempstr[20];
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "  %d/%d  ", caseFanGetCurPercent(), caseFanGetSetPercent());
+    sprintf(tempstr, "  %d/%d  ", chamberFanGetCurPercent(), chamberFanGetSetPercent());
   else
-    sprintf(tempstr, "  %d/%d  ", (int)caseFanGetCurSpeed(), (int)caseFanGetSetSpeed());
+    sprintf(tempstr, "  %d/%d  ", (int)chamberFanGetCurSpeed(), (int)chamberFanGetSetSpeed());
 
   setLargeFont(true);
   GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
   setLargeFont(false);
 }
 
-void menuCaseFan(void)
+void menuChamberFan(void)
 {
   // 1 title, ITEM_PER_PAGE items (icon + label)
-  MENUITEMS caseFanItems = {
+  MENUITEMS chamberFanItems = {
     // title
-    LABEL_CASE_FAN,
+    LABEL_CHAMBER_FAN,
     // icon                         label
     {{ICON_DEC,                     LABEL_DEC},
      {ICON_BACKGROUND,              LABEL_BACKGROUND},
@@ -32,27 +32,27 @@ void menuCaseFan(void)
      {ICON_BACK,                    LABEL_BACK},}
   };
 
-  caseFanSetSpeed(caseFanGetCurSpeed());
+  chamberFanSetSpeed(chamberFanGetCurSpeed());
 
-  menuDrawPage(&caseFanItems);
-  caseFanSpeedReDraw();
+  menuDrawPage(&chamberFanItems);
+  chamberFanSpeedReDraw();
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
   #endif
 
-  while (infoMenu.menu[infoMenu.cur] == menuCaseFan)
+  while (infoMenu.menu[infoMenu.cur] == menuChamberFan)
   {
     KEY_VALUES key_num = menuKeyGetValue();
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (caseFanGetSetSpeed() > 0)
+        if (chamberFanGetSetSpeed() > 0)
         {
           if (infoSettings.fan_percentage == 1)
-            caseFanSetPercent(caseFanGetSetPercent() - 1);
+            chamberFanSetPercent(chamberFanGetSetPercent() - 1);
           else
-            caseFanSetSpeed(caseFanGetSetSpeed() - 1);
+            chamberFanSetSpeed(chamberFanGetSetSpeed() - 1);
         }
         break;
 
@@ -62,47 +62,47 @@ void menuCaseFan(void)
         if (infoSettings.fan_percentage == 1)
         {
           strcpy(titlestr, "Min:0 | Max:100");
-          uint8_t val = numPadInt((u8 *) titlestr, caseFanGetSetPercent(), 0, false);
+          uint8_t val = numPadInt((u8 *) titlestr, chamberFanGetSetPercent(), 0, false);
           val = NOBEYOND(0, val, 100);
 
-          if (val != caseFanGetSetPercent())
-            caseFanSetPercent(val);
+          if (val != chamberFanGetSetPercent())
+            chamberFanSetPercent(val);
         }
         else
         {
           sprintf(titlestr, "Min:0 | Max:%d", 255);
-          uint8_t val = numPadInt((u8 *) titlestr, caseFanGetCurSpeed(), 0, false);
+          uint8_t val = numPadInt((u8 *) titlestr, chamberFanGetCurSpeed(), 0, false);
           val = NOBEYOND(0, val,  255);
 
-          if (val != caseFanGetCurSpeed())
-            caseFanSetSpeed(val);
+          if (val != chamberFanGetCurSpeed())
+            chamberFanSetSpeed(val);
         }
 
-        menuDrawPage(&caseFanItems);
-        caseFanSpeedReDraw();
+        menuDrawPage(&chamberFanItems);
+        chamberFanSpeedReDraw();
         break;
       }
 
       case KEY_ICON_3:
-        if (caseFanGetSetSpeed() < 255)
+        if (chamberFanGetSetSpeed() < 255)
         {
           if (infoSettings.fan_percentage == 1)
-            caseFanSetPercent(caseFanGetSetPercent() + 1);
+            chamberFanSetPercent(chamberFanGetSetPercent() + 1);
           else
-            caseFanSetSpeed( caseFanGetSetSpeed() + 1);
+            chamberFanSetSpeed( chamberFanGetSetSpeed() + 1);
         }
         break;
 
       case KEY_ICON_4:
-        caseFanSetSpeed(255 / 2);  // 50%
+        chamberFanSetSpeed(255 / 2);  // 50%
         break;
 
       case KEY_ICON_5:
-        caseFanSetSpeed(255);
+        chamberFanSetSpeed(255);
         break;
 
       case KEY_ICON_6:
-        caseFanSetSpeed(0);
+        chamberFanSetSpeed(0);
         break;
 
       case KEY_ICON_7:
@@ -113,20 +113,20 @@ void menuCaseFan(void)
         #if LCD_ENCODER_SUPPORT
           if (encoderPosition)
           {
-            if (caseFanGetSetSpeed() < 255 && encoderPosition > 0)
+            if (chamberFanGetSetSpeed() < 255 && encoderPosition > 0)
             {
               if (infoSettings.fan_percentage == 1)
-                caseFanSetPercent(caseFanGetSetPercent() + 1);
+                chamberFanSetPercent(chamberFanGetSetPercent() + 1);
               else
-                caseFanSetSpeed(caseFanGetSetSpeed() + 1);
+                chamberFanSetSpeed(chamberFanGetSetSpeed() + 1);
             }
 
-            if (caseFanGetSetSpeed() > 0 && encoderPosition < 0)
+            if (chamberFanGetSetSpeed() > 0 && encoderPosition < 0)
             {
               if (infoSettings.fan_percentage == 1)
-                caseFanSetPercent(caseFanGetSetPercent() - 1);
+                chamberFanSetPercent(chamberFanGetSetPercent() - 1);
               else
-                caseFanSetSpeed(caseFanGetSetSpeed() - 1);
+                chamberFanSetSpeed(chamberFanGetSetSpeed() - 1);
             }
             encoderPosition = 0;
           }

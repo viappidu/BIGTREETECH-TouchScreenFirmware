@@ -70,7 +70,7 @@
 #include "ProbeHeightControl.h"
 #include "HomeOffsetControl.h"
 #include "CaseLightControl.h"
-#include "CaseFanControl.h"
+#include "ChamberFanControl.h"
 #include "AirAssistControl.h"
 
 #include "extend.h"
@@ -119,7 +119,7 @@
 
 #include "UnifiedMove.h"
 #include "UnifiedHeat.h"
-#include "AirACaseFan.h"
+#include "AirControl.h"
 #include "StatusScreen.h"
 
 #include "Tuning.h"
@@ -131,7 +131,7 @@
 #include "CaseLight.h"
 
 #include "AirAssist.h"
-#include "CaseFan.h"
+#include "ChamberFan.h"
 
 #define MAX_MENU_DEPTH 10       // max sub menu depth
 typedef void (*FP_MENU)(void);

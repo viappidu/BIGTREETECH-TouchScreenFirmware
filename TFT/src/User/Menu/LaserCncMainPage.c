@@ -8,7 +8,7 @@ void menuLaserCncMain(void)
     // title
     LABEL_LASERCNCMAINMENU,
     // icon              label
-    {{ICON_AIRA_CASEFAN, LABEL_AIRA_CASEFAN},
+    {{ICON_AIR_CONTROL, LABEL_AIR_CONTROL},
      //TODO: CREATE LASER_CNC ICON(!) and change below
      {ICON_LASER_CNC,    LABEL_LASER_CNC},
      {ICON_HOME_MOVE,    LABEL_UNIFIEDMOVE},
@@ -35,7 +35,7 @@ void menuLaserCncMain(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        infoMenu.menu[++infoMenu.cur] = menuAirACaseFan;
+        infoMenu.menu[++infoMenu.cur] = menuAirControl;
         break;
 
       case KEY_ICON_1:

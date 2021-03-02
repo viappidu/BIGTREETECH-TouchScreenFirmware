@@ -461,8 +461,8 @@ void parseACK(void)
         uint8_t i = ack_value();
         if (ack_seen("S"))
         {
-          // if (i == infoSettings.case_fan)
-          //   caseFanSetCurSpeed(ack_value());
+          // if (i == infoSettings.chamber_fan)
+          //   chamberFanSetCurSpeed(ack_value());
           // else
             fanSetCurSpeed(i, ack_value());
         }

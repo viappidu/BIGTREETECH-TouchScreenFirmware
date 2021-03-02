@@ -1,5 +1,5 @@
-#ifndef _CASEFAN_H_
-#define _CASEFAN_H_
+#ifndef _CHAMBERFAN_H_
+#define _CHAMBERFAN_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,7 +8,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-void menuCaseFan(void);
+void menuChamberFan(void);
 
 
 #ifdef __cplusplus

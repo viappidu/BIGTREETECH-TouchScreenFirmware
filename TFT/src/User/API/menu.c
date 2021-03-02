@@ -777,7 +777,7 @@ GUI_POINT getIconStartPoint(int index)
     }
   }
 #endif //SMART_HOME
-//TODO: Missing code here?... (added loops for casefan and airassist)
+//TODO: Missing code here?... (added loops for chamberFan and airassist)
 void loopBackEnd(void)
 {
   // Get Gcode command from the file to be printed
@@ -796,8 +796,8 @@ void loopBackEnd(void)
   loopSpeed();
   //TODO: Remove
   // Case fan speed
-  if (CASE_FAN_NUM != 0)
-    loopCaseFan();
+  if (infoSettings.chamber_fan != 0)
+    loopChamberFan();
   // Air assist
   if (infoSettings.air_assist_type != 1 || infoSettings.air_assist_type != 1)
     loopAirAssist();
