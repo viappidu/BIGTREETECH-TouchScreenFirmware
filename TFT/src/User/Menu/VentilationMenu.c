@@ -1,7 +1,7 @@
-#include "AirControl.h"
+#include "VentilationMenu.h"
 #include "includes.h"
 
-const MENUITEMS AirControlItems = {
+const MENUITEMS VentilationMenuItems = {
   // title
   LABEL_UNIFIEDHEAT,
   // icon                         label
@@ -15,12 +15,12 @@ const MENUITEMS AirControlItems = {
    {ICON_BACK,                    LABEL_BACK},}
 };
 //TODO: Refine menu items with check if we need submenus. eg. chamber_fan=0 or air_assist=1
-void menuAirControl(void)
+void menuVentilationMenu(void)
 {
   KEY_VALUES key_num = KEY_IDLE;
-  menuDrawPage(&AirControlItems);
+  menuDrawPage(&VentilationMenuItems);
 
-  while(infoMenu.menu[infoMenu.cur] == menuAirControl)
+  while(infoMenu.menu[infoMenu.cur] == menuVentilationMenu)
   {
     key_num = menuKeyGetValue();
     switch (key_num)

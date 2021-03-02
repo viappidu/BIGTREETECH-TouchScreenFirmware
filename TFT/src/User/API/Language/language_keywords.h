@@ -310,7 +310,7 @@ extern "C" {
 #define LANG_KEY_ADJUST_FAILED                "label_adjust_failed:"
 #define LANG_KEY_UNIFIEDMOVE                  "label_unifiedmove:"
 #define LANG_KEY_UNIFIEDHEAT                  "label_unifiedheat:"
-#define LANG_KEY_AIR_CONTROL                  "label_air_control:"
+#define LANG_KEY_VENTILATIONMENU                  "label_ventilationmenu:"
 #define LANG_KEY_LASER_CNC                    "label_laser_cnc:"
 #define LANG_KEY_TOUCH_TO_EXIT                "label_touch_to_exit:"
 #define LANG_KEY_MAINMENU                     "label_mainmenu:"

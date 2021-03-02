@@ -299,7 +299,7 @@
     #define STRING_ADJUST_FAILED          "Adjustment failed, please try again"
     #define STRING_UNIFIEDMOVE            "Movement"
     #define STRING_UNIFIEDHEAT            "Heat/Fan"
-    #define STRING_AIR_CONTROL            "Air Control"
+    #define STRING_VENTILATIONMENU            "Ventilation"
     #define STRING_AIR_ASSIST_TYPE        "Air assist type"
     #define STRING_AIR_ASSIST             "Air assist"
     #define STRING_TOUCH_TO_EXIT          "Touch anywhere to exit"
