@@ -8,6 +8,8 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+uint16_t chamberFanlastValue;
+
 void menuChamberFan(void);
 
 

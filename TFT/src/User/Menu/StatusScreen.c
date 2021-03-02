@@ -283,7 +283,17 @@ void menuStatus(void)
         infoMenu.menu[++infoMenu.cur] = menuHeat;
         break;
       case KEY_ICON_2:
-        infoMenu.menu[++infoMenu.cur] = menuFan;
+      //TODO: Work out rest of icons
+        switch (infoSettings.mode)
+        {
+          case MODE_LASER:
+          case MODE_CNC:
+            infoMenu.menu[++infoMenu.cur] = menuVentilationMenu;
+            break;        
+          default:
+            infoMenu.menu[++infoMenu.cur] = menuFan;
+            break;
+        }
         break;
       case KEY_SPEEDMENU:
         SET_SPEEDMENUINDEX(0);

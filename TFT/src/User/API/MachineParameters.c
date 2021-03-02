@@ -1,6 +1,6 @@
 #include "MachineParameters.h"
 #include "includes.h"
-
+//TODO: Work out logic for boards with more steppers/extensions
 PARAMETERS infoParameters;
 
 const uint8_t parameter_element_count[PARAMETERS_COUNT] = {5, 5, 5, 3, 4, 1, 3, 4, 4, 1, 3, 2, 3, 2, 5, 3, 5, 1};

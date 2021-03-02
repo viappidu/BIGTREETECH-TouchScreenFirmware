@@ -681,9 +681,9 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_FAN_CTRL_COUNT:
       SET_VALID_INT_VALUE(infoSettings.fan_ctrl_count, 0, MAX_FAN_CTRL_COUNT);
       break;
-    //TODO: Work real value with marlin types
+
     case C_INDEX_CHAMBER_FAN_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.chamber_fan_type, 0, 3);
+      SET_VALID_INT_VALUE(infoSettings.chamber_fan_type, 0, 9);
       break;
 
     case C_INDEX_CHAMBER_FAN_NUM:

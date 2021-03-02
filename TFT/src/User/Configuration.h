@@ -134,7 +134,7 @@
 #define EXTRUDER_NUM        1  // set in 1~6
 #define FAN_NUM             1  // set in 1~6
 #define FAN_CTRL_NUM        0  // set in 1~2
-#define CHAMBER_FAN_TYPE    0  // Default: 0 for disabled
+#define CHAMBER_FAN_TYPE    9  // Default: 9 for disabled
 #define CHAMBER_FAN_NUM     0  // Default: 0 for disabled
 #define AIR_ASSIST_TYPE     0  // Default: 0 for disabled
 #define AIR_ASSIST_FAN_NUM  0  // Default: 0 for disabled

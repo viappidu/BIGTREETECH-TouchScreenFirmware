@@ -1,18 +1,39 @@
 #include "ChamberFan.h"
 #include "includes.h"
 
-void chamberFanSpeedReDraw()
+//TODO: move type=1 logic to common menu
+
+void chamberFanValueReDraw(bool skip_header)
 {
   char tempstr[20];
 
-  if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "  %d/%d  ", chamberFanGetCurPercent(), chamberFanGetSetPercent());
-  else
-    sprintf(tempstr, "  %d/%d  ", (int)chamberFanGetCurSpeed(), (int)chamberFanGetSetSpeed());
+  if (!skip_header)
+  {
+    setLargeFont(true);
+    if (infoSettings.chamber_fan_type != 8)
+    {
+      if (infoSettings.fan_percentage == 1)
+        GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"%");
+      else
+        GUI_DispStringCenter((exhibitRect.x0 + exhibitRect.x1)>>1, exhibitRect.y0, (uint8_t *)"PWM");
+    }
+    setLargeFont(false);
+  }
 
-  setLargeFont(true);
-  GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
-  setLargeFont(false);
+  if (infoSettings.chamber_fan_type == 8)
+  {
+    sprintf(tempstr, "  %s  ", (int)fanGetSetSpeed(infoSettings.chamber_fan) == (int)infoSettings.fan_max[infoSettings.chamber_fan] ? textSelect(LABEL_ON) : textSelect(LABEL_OFF));
+  }
+  else
+  {
+    if (infoSettings.fan_percentage == 1)
+      sprintf(tempstr, "  %d/%d  ",  fanGetCurPercent(infoSettings.chamber_fan), fanGetSetPercent(infoSettings.chamber_fan));
+    else
+      sprintf(tempstr, "  %d/%d  ", (int)fanGetCurSpeed(infoSettings.chamber_fan), (int)fanGetSetSpeed(infoSettings.chamber_fan));
+    setLargeFont(true);
+    GUI_DispStringInPrect(&exhibitRect, (u8 *)tempstr);
+    setLargeFont(false);
+  }
 }
 
 void menuChamberFan(void)
@@ -32,10 +53,22 @@ void menuChamberFan(void)
      {ICON_BACK,                    LABEL_BACK},}
   };
 
-  chamberFanSetSpeed(chamberFanGetCurSpeed());
+  switch (infoSettings.chamber_fan_type)
+  {
+    case 0:
+    case 1:
+    case 2:
+    case 8:
+      fanSetSpeed(infoSettings.chamber_fan, fanGetCurSpeed(infoSettings.chamber_fan));
+      break;
+    case 9:
+    default:
+      break;
+  }
+
 
   menuDrawPage(&chamberFanItems);
-  chamberFanSpeedReDraw();
+  chamberFanValueReDraw(false);
 
   #if LCD_ENCODER_SUPPORT
     encoderPosition = 0;
@@ -47,13 +80,14 @@ void menuChamberFan(void)
     switch (key_num)
     {
       case KEY_ICON_0:
-        if (chamberFanGetSetSpeed() > 0)
+        if (fanGetSetSpeed(infoSettings.chamber_fan)  != 8 && (fanGetSetSpeed(infoSettings.chamber_fan) > 0))
         {
           if (infoSettings.fan_percentage == 1)
-            chamberFanSetPercent(chamberFanGetSetPercent() - 1);
+            fanSetPercent(infoSettings.chamber_fan, fanGetSetPercent(infoSettings.chamber_fan) - 1);
           else
-            chamberFanSetSpeed(chamberFanGetSetSpeed() - 1);
+            fanSetSpeed(infoSettings.chamber_fan, fanGetSetSpeed(infoSettings.chamber_fan) - 1);
         }
+        chamberFanValueReDraw(true)
         break;
 
       case KEY_INFOBOX:
@@ -84,25 +118,31 @@ void menuChamberFan(void)
       }
 
       case KEY_ICON_3:
-        if (chamberFanGetSetSpeed() < 255)
+        if (fanGetSetSpeed(infoSettings.chamber_fan_type)  != 8 && (fanGetSetSpeed(infoSettings.chamber_fan) < infoSettings.fan_max[infoSettings.chamber_fan]))
         {
           if (infoSettings.fan_percentage == 1)
-            chamberFanSetPercent(chamberFanGetSetPercent() + 1);
+            fanSetPercent(infoSettings.chamber_fan, fanGetSetSpeed(infoSettings.chamber_fan) + 1);
           else
-            chamberFanSetSpeed( chamberFanGetSetSpeed() + 1);
+            fanSetSpeed(infoSettings.chamber_fan, fanGetSetSpeed(infoSettings.chamber_fan) + 1);
         }
+        chamberFanValueReDraw(true);
         break;
 
       case KEY_ICON_4:
-        chamberFanSetSpeed(255 / 2);  // 50%
+        if (infoSettings.chamber_fan_type != 8)
+          fanSetSpeed(infoSettings.chamber_fan, infoSettings.fan_max[infoSettings.air_assist_fan] / 2);  // 50%
+        else
+          fanSetSpeed(infoSettings.chamber_fan, infoSettings.fan_max[infoSettings.air_assist_fan]);  // On
+        chamberFanValueReDraw(true);
         break;
 
       case KEY_ICON_5:
-        chamberFanSetSpeed(255);
+        fanSetSpeed(infoSettings.chamber_fan, infoSettings.fan_max[infoSettings.chamber_fan]);
         break;
 
       case KEY_ICON_6:
-        chamberFanSetSpeed(0);
+        if (infoSettings.chamber_fan_type != 8)
+          chamberFanSetSpeed(0);
         break;
 
       case KEY_ICON_7:
